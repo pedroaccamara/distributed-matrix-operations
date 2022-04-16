@@ -1,4 +1,4 @@
-package com.example.grpc.server.grpcserver.storage;
+package com.example.grpc.client.grpcclient.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
