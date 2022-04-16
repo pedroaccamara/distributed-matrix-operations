@@ -1,4 +1,4 @@
-package com.example.grpc.server.grpcserver;
+package com.example.grpc.client.grpcclient;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.example.grpc.server.grpcserver.storage.StorageProperties;
-import com.example.grpc.server.grpcserver.storage.StorageService;
+import com.example.grpc.client.grpcclient.storage.StorageProperties;
+import com.example.grpc.client.grpcclient.storage.StorageService;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
