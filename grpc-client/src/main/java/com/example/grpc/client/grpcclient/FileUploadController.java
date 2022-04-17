@@ -62,24 +62,28 @@ public class FileUploadController {
 			return message(redirectAttributes, "Please choose a file before uploading!");
 		}
 
-		try { // Deletables
-			String stringed = new String(file.getBytes());
-			String[] matrix = stringed.trim().split("\n");
-			String[] cols = matrix[0].trim().split(" ");
-			int[][] m = new int[matrix.length][cols.length];
-			if (!square(m)) return message(redirectAttributes, "Matrix is not squared");
-			if (!sidesSquared(m)) return message(redirectAttributes, "Matrix's sides aren't a perfect square");
-			String conversion = toInt(m, matrix);
-			if (!conversion.equals("")) return message(redirectAttributes, conversion);
-			System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
-		}
-		catch (Exception e) {
-			System.out.println("FileUploadController@63\n" + e.toString());
-			return message(redirectAttributes, "Check error");
-		}
+		String process = processMatrix(file, redirectAttributes);
+		if (process != "") return process;
 
 		storageService.store(file);
 		return message(redirectAttributes, "You successfully uploaded " + file.getOriginalFilename() + "!");
+	}
+
+	@PostMapping("/")
+	public String handleFileUpload(@RequestParam("file") MultipartFile[] files,
+			RedirectAttributes redirectAttributes) {
+		if (matrix1 != null) return message(redirectAttributes, "You can only upload one more matrix");
+		if (files.length != 2) {
+			return message(redirectAttributes, "Please choose two files before uploading!");
+		}
+
+		String process;
+		for (MultipartFile file : files) {
+			process = processMatrix(file, redirectAttributes);
+			if (process != "") return process;
+			storageService.store(file);
+		}
+		return message(redirectAttributes, "You successfully uploaded " + files[0].getOriginalFilename() + " and " + files[1].getOriginalFilename() + "!");
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
@@ -96,8 +100,29 @@ public class FileUploadController {
 		return redirect;
 	}
 
-	private void processMatrix(MultipartFile file) {
-		return;
+	private String processMatrix(MultipartFile file, RedirectAttributes redirectAttributes) {
+		try {
+			String stringed = new String(file.getBytes());
+			String[] matrix = stringed.trim().split("\n");
+			String[] cols = matrix[0].trim().split(" ");
+			int[][] m = new int[matrix.length][cols.length];
+			if (!square(m)) return message(redirectAttributes, "Matrix is not squared");
+			if (!sidesSquared(m)) return message(redirectAttributes, "Matrix's sides aren't a perfect square");
+			String conversion = toInt(m, matrix);
+			if (!conversion.equals("")) return message(redirectAttributes, conversion);
+			System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
+			System.out.println("And empty int[][] is : " + matrix2);
+			if (matrix1 == null) {
+				matrix1 = m;
+			} else {
+				matrix2 = m;
+			}
+			return "";
+		}
+		catch (Exception e) {
+			System.out.println("FileUploadController@63\n" + e.toString());
+			return message(redirectAttributes, "Check error");
+		}
 	}
 
 	private String toInt(int[][] m, String[] matrix) {
