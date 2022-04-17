@@ -109,9 +109,9 @@ public class FileUploadController {
 			for (String num : row.trim().split(" ")) {
 				m[r][c] = Integer.parseInt(num);
 				c += 1;
-				if (c == noCols) return "Columns don't all have the same size";
+				if (c == noCols) return "Columns don't all have the same size at " + c + " row " + r;
 			}
-			if (c != noCols-1) return "Columns don't all have the same size";
+			if (c != noCols-1) return "Columns don't all have the same size " + c + " didn't match with " + noCols;
 			c = 0;
 			r += 1;
 		}
