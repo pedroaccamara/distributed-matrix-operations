@@ -40,7 +40,7 @@ public class PingPongEndpoint {
 		this.grpcClientService = grpcClientService;
 		this.storageService = storageService;
 	}
-	@GetMapping("/")
+	@GetMapping("/listy")
 	public String listUploadedFiles(Model model) throws IOException {
 
 		model.addAttribute("files", storageService.loadAll().map(
