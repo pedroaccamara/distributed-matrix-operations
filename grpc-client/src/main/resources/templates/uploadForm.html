@@ -42,7 +42,7 @@
 		<div>
 			<p>Testing stuff</p>
 			<p th:text="${files}">No dot</p>
-			<p th:text="${files.size}"> Dot length in</p>
+			<!-- <p th:text="${files.size}"> Dot length in</p> -->
 			<p th:text="${files}.size"> Dot length out</p>
 			<p th:text="2">Num in</p>
 			<p th:text="2">Num out</p>
@@ -50,20 +50,20 @@
 			<div th:if="3==3">
 				<p>Direct Expression</p>
 			</div>
-			<div th:if="${files.size} == 0">
-				<p>More complex at 0</p>
-			</div>
-			<div th:if="${files.size} == 1">
-				<p>More complex at 1</p>
-			</div>
-			<div th:if="${files.size} == 2">
-				<p>More complex at 2</p>
-			</div>
+			<!-- <div th:if="${files.size} == 0"> -->
+				<!-- <p>More complex at 0</p> -->
+			<!-- </div> -->
+			<!-- <div th:if="${files.size} == 1"> -->
+				<!-- <p>More complex at 1</p> -->
+			<!-- </div> -->
+			<!-- <div th:if="${files.size} == 2"> -->
+				<!-- <p>More complex at 2</p> -->
+			<!-- </div> -->
 			<div th:object="${files}">
 				<p th:text="*{size}">Alone size prop</p>
 			</div>
 			<div th:each="file, iterStat : ${files}">
-				<p th:text="${files.size}">Size prop</p>
+				<!-- <p th:text="${files.size}">Size prop</p> -->
 				<p th:text="${iterStat.size}">iterStat size prop</p>
 			</div>
 		</div>
