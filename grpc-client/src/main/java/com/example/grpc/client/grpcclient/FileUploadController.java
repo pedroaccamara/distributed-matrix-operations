@@ -107,11 +107,11 @@ public class FileUploadController {
 		int c = 0;
 		for (String row : matrix) {
 			for (String num : row.trim().split(" ")) {
-				if (c == noCols) return "Columns don't all have the same size at " + c + " row " + r;
+				if (c == noCols) return "Columns don't all have the same size";
 				m[r][c] = Integer.parseInt(num);
 				c += 1;
 			}
-			if (c != noCols) return "Columns don't all have the same size " + c + " didn't match with " + noCols;
+			if (c != noCols) return "Columns don't all have the same size";
 			c = 0;
 			r += 1;
 		}
@@ -119,6 +119,7 @@ public class FileUploadController {
 	}
 
 	private boolean square(int[][] m) {
+		System.out.println("M's dimensions are " + m.length + " and " + m[0].length);
 		return m.length == m[0].length;
 	}
 

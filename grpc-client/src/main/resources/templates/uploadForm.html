@@ -38,6 +38,28 @@
 				</li>
 			</ul>
 		</div>
+	
+		<div>
+			<p>Testing stuff</p>
+			<p th:text="${files}">No dot</p>
+			<p th:text="${files.length}"> Dot length in</p>
+			<p th:text="${files}.length"> Dot length out</p>
+			<p th:text="${2}">Num in</p>
+			<p th:text="2">Num out</p>
+			<p th:text="${3==3}">Expression</p>
+			<div th:if="${3==3}">
+				<p>Direct Expression</p>
+			</div>
+			<div th:if="${files.length==0}">
+				<p>More complex at 0</p>
+			</div>
+			<div th:if="${files.length==1}">
+				<p>More complex at 1</p>
+			</div>
+			<div th:if="${files.length==2}">
+				<p>More complex at 2</p>
+			</div>
+		</div>
 	</main>
 
 </body>
