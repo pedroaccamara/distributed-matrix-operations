@@ -2,10 +2,10 @@ package com.example.grpc.client.grpcclient;
 
 // import com.example.grpc.client.grpcclient.PingRequest;
 // import com.example.grpc.client.grpcclient.PongResponse;
-import com.example.grpc.client.grpcclient.PingPongServiceGrpc;
-import com.example.grpc.client.grpcclient.MatrixRequest;
-import com.example.grpc.client.grpcclient.MatrixReply;
-import com.example.grpc.client.grpcclient.MatrixServiceGrpc;
+import com.example.grpc.server.grpcserver.PingPongServiceGrpc;
+import com.example.grpc.server.grpcserver.MatrixRequest;
+import com.example.grpc.server.grpcserver.MatrixReply;
+import com.example.grpc.server.grpcserver.MatrixServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import net.devh.boot.grpc.client.inject.GrpcClient;
