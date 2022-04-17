@@ -59,9 +59,9 @@
 			<!-- <div th:if="${files.size} == 2"> -->
 				<!-- <p>More complex at 2</p> -->
 			<!-- </div> -->
-			<div th:object="${files}">
+			<!-- <div th:object="${files}">
 				<p th:text="*{size}">Alone size prop</p>
-			</div>
+			</div> -->
 			<div th:each="file, iterStat : ${files}">
 				<!-- <p th:text="${files.size}">Size prop</p> -->
 				<p th:text="${iterStat.size}">iterStat size prop</p>
