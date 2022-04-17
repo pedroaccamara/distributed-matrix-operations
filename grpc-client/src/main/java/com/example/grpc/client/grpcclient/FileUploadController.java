@@ -27,6 +27,8 @@ import com.example.grpc.client.grpcclient.storage.StorageService;
 public class FileUploadController {
 
 	private final StorageService storageService;
+	public int[][] matrix1;
+	public int[][] matrix2;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -92,6 +94,10 @@ public class FileUploadController {
 	private String message(RedirectAttributes redirectAttributes, String message, String redirect) {
 		redirectAttributes.addFlashAttribute("message", message);
 		return redirect;
+	}
+
+	private void processMatrix(MultipartFile file) {
+		return;
 	}
 
 	private String toInt(int[][] m, String[] matrix) {

@@ -25,13 +25,13 @@
 		<div>
 			<form id="submittionForm" th:unless="${#arrays.length(#arrays.toArray(files))} == 2" method="POST" enctype="multipart/form-data" action="/">
 				<table>
-					<tr><td><input id="fileInput" type="file" name="file" /></td></tr>
+					<tr><td><input id="fileInput" type="file" name="file" multiple /></td></tr>
 					<tr><td><input id="submitFile" type="submit" value="Upload" /></td></tr>
 				</table>
 			</form>
 			<table th:if="${#arrays.length(#arrays.toArray(files))} == 2">
 				<tr>
-					<td><form id="add"><input type="submit" /></form></td><td><form id="mult"><input type="submit" /></form></td>
+					<td><form id="add"><input type="submit" value="Add" /></form></td><td><form id="mult"><input type="submit" value="Mult" /></form></td>
 				</tr>
 			</table>
 		</div>
@@ -44,20 +44,21 @@
 			</ul>
 		</div>
 	
-		<div>
+		<!-- <div>
 			<p>Testing stuff</p>
 			<p th:text="${files}">No dot</p>
 			<p th:text="${#arrays.length(#arrays.toArray(files))}">Object array</p>
 			<p th:text="${#arrays.length(#arrays.toStringArray(files))}">String array</p>
-			<!-- <p th:text="3==3">This will become "true"</p>
+			<p th:text="3==3">This will become "true"</p>
 			<div th:if="3==3">
 				<p>Expr was true</p>
-			</div> -->
+			</div>
 			<div th:each="file, iterStat : ${files}">
 				<p th:text="${iterStat.size}">iterStat size prop</p>
 			</div>
-		</div>
+		</div> -->
 	</main>
+
 	<script th:inline="javascript">
 		var files = /*[[${#arrays.toArray(files)}]]*/ ArrayofFiles;
 		var filesStrings = /*[[${#arrays.toStringArray(files)}]]*/ StringArrayofFiles;
@@ -72,10 +73,12 @@
 			let mult = document.getElementById("mult");
 			form.onsubmit = function(event){
 				console.log(document.getElementById("fileInput"));
+				console.log("Or the files");
+				console.log(document.getElementById("fileInput").files);
 				if (prev) event.preventDefault();
 				prev = false;
 			};
-			add.onsubmit = function(event){
+			add.onsubmit = function(event){ // if add is not null!
 				console.log(add.firstChild);
 				if (prev1) event.preventDefault();
 				prev1 = false;
