@@ -2,17 +2,24 @@
 <head>
 <style>
 	main {
-		flex: 1;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
+	}
+	h2 {
+		padding-bottom: auto;
 	}
 </style>
 </head>
 <body>
 
 	<main>
+
 		<div th:if="${message}">
 			<h2 th:text="${message}"/>
+		</div>
+		<div th:else>
+			<h2>Upload your files here</h2>
 		</div>
 	
 		<div>
