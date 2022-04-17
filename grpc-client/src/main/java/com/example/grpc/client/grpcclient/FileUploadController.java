@@ -57,8 +57,6 @@ public class FileUploadController {
 	public String handleFileUpload(@RequestParam("file") MultipartFile file,
 			RedirectAttributes redirectAttributes) {
 		if (file.isEmpty()) {
-			// redirectAttributes.addFlashAttribute("message", "Please choose a file before uploading!");
-			// return "redirect:/";
 			return message(redirectAttributes, "Please choose a file before uploading!");
 		}
 
@@ -69,7 +67,6 @@ public class FileUploadController {
 			int[][] m = new int[matrix.length][cols.length];
 			if (!square(m)) return message(redirectAttributes, "Matrix is not squared");
 			if (!sidesSquared(m)) return message(redirectAttributes, "Matrix's sides aren't a perfect square");
-			System.out.println("Tried string way successfuly: ");
 			String conversion = toInt(m, matrix);
 			if (!conversion.equals("")) return message(redirectAttributes, conversion);
 			System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
@@ -80,10 +77,6 @@ public class FileUploadController {
 		}
 
 		storageService.store(file);
-		// redirectAttributes.addFlashAttribute("message",
-		// 		"You successfully uploaded " + file.getOriginalFilename() + "!");
-
-		// return "redirect:/";
 		return message(redirectAttributes, "You successfully uploaded " + file.getOriginalFilename() + "!");
 	}
 
@@ -119,7 +112,6 @@ public class FileUploadController {
 	}
 
 	private boolean square(int[][] m) {
-		System.out.println("M's dimensions are " + m.length + " and " + m[0].length);
 		return m.length == m[0].length;
 	}
 
