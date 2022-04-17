@@ -59,10 +59,10 @@ public class PingPongEndpoint {
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
 				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
 	}
-	@GetMapping("/ping")
-	public String ping() {
-		return grpcClientService.ping();
-	}
+	// @GetMapping("/ping")
+	// public String ping() {
+	// 	return grpcClientService.ping();
+	// }
     @GetMapping("/add")
 	public String add() {
 		return grpcClientService.add();
