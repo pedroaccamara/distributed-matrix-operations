@@ -42,14 +42,28 @@
 		<div>
 			<p>Testing stuff</p>
 			<p th:text="${files}">No dot</p>
-			<!-- <p th:text="${files.size}"> Dot length in</p> -->
-			<!-- <p th:text="${files}.size"> Dot length out</p> -->
-			<p th:text="2">Num in</p>
-			<p th:text="2">Num out</p>
-			<p th:text="3==3">Expression</p>
+			<p th:text="${#arrays.length(#arrays.toArray(files))}">Object array</p>
+			<p th:text="${#arrays.length(#arrays.toStringArray(files))}">String array</p>
+			<p th:text="3==3">This will become "true"</p>
 			<div th:if="3==3">
-				<p>Direct Expression</p>
+				<p>Expr was true</p>
 			</div>
+			<
+			<div th:each="file, iterStat : ${files}">
+				<p th:text="${iterStat.size}">iterStat size prop</p>
+			</div>
+		</div>
+	</main>
+	<script th:inline="javascript">
+		var files = /*[[${#arrays.toArray(files)}]]*/ ArrayofFiles;
+		var filesStrings = /*[[${#arrays.toStringArray(files)}]]*/ StringArrayofFiles;
+		console.log(files);
+		console.log(filesStrings);
+	</script>
+
+</body>
+</html>
+
 			<!-- <div th:if="${files.size} == 0"> -->
 				<!-- <p>More complex at 0</p> -->
 			<!-- </div> -->
@@ -62,12 +76,3 @@
 			<!-- <div th:object="${files}">
 				<p th:text="*{size}">Alone size prop</p>
 			</div> -->
-			<div th:each="file, iterStat : ${files}">
-				<!-- <p th:text="${files.size}">Size prop</p> -->
-				<p th:text="${iterStat.size}">iterStat size prop</p>
-			</div>
-		</div>
-	</main>
-
-</body>
-</html>
