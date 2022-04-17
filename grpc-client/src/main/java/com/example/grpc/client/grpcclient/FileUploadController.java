@@ -55,6 +55,10 @@ public class FileUploadController {
 	@PostMapping("/")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file,
 			RedirectAttributes redirectAttributes) {
+		if (file.isEmpty()) {
+			redirectAttributes.addFlashAttribute("message", "Please choose a file before uploading!");
+			return "redirect:/";
+		}
 
 		storageService.store(file);
 		redirectAttributes.addFlashAttribute("message",
