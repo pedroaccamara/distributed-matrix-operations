@@ -55,27 +55,26 @@ public class FileUploadController {
 				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
 	}
 
-	@PostMapping("/")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file,
-			RedirectAttributes redirectAttributes) {
-		if (file.isEmpty()) {
-			return message(redirectAttributes, "Please choose a file before uploading!");
-		}
+	// @PostMapping("/")
+	// public String handleFileUpload(@RequestParam("file") MultipartFile file,
+	// 		RedirectAttributes redirectAttributes) {
+	// 	if (file.isEmpty()) {
+	// 		return message(redirectAttributes, "Please choose a file before uploading!");
+	// 	}
 
-		String process = processMatrix(file, redirectAttributes);
-		if (process != "") return process;
+	// 	String process = processMatrix(file, redirectAttributes);
+	// 	if (process != "") return process;
 
-		storageService.store(file);
-		return message(redirectAttributes, "You successfully uploaded " + file.getOriginalFilename() + "!");
-	}
+	// 	storageService.store(file);
+	// 	return message(redirectAttributes, "You successfully uploaded " + file.getOriginalFilename() + "!");
+	// }
 
 	@PostMapping("/")
 	public String handleFileUpload(@RequestParam("file") MultipartFile[] files,
 			RedirectAttributes redirectAttributes) {
-		if (matrix1 != null) return message(redirectAttributes, "You can only upload one more matrix");
-		if (files.length != 2) {
-			return message(redirectAttributes, "Please choose two files before uploading!");
-		}
+		if (files.length == 0) return message(redirectAttributes, "Please choose a file before uploading!");
+		if (matrix1 != null && files.length > 1) return message(redirectAttributes, "You can only upload one more matrix");
+		if (files.length > 2) return message(redirectAttributes, "Please choose no more than two files before uploading!");
 
 		String process;
 		for (MultipartFile file : files) {
