@@ -9,7 +9,6 @@ public class MatrixServiceImpl extends MatrixServiceGrpc.MatrixServiceImplBase
 	@Override
 	public void addBlock(MatrixRequest request, StreamObserver<MatrixReply> reply)
 	{
-		System.out.println("Changes made:\n" + request + "\n");
 		System.out.println("Request received from client:\n" + request);
 		int C00=request.getA00()+request.getB00();
     	int C01=request.getA01()+request.getB01();
