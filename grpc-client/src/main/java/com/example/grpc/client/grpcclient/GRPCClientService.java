@@ -33,6 +33,7 @@ public class GRPCClientService {
 			.build());
 			
 			// all operations needed * time of a function call / deadline
+		System.out.println("Filled A's stub with " + m1[1][1] + " and " + m2[1][1]);
 		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
 		return resp;
     }
