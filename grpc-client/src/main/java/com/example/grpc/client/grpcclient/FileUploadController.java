@@ -27,8 +27,8 @@ import com.example.grpc.client.grpcclient.storage.StorageService;
 public class FileUploadController {
 
 	private final StorageService storageService;
-	public int[][] matrix1;
-	public int[][] matrix2;
+	// public int[][] matrix1;
+	// public int[][] matrix2;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -73,7 +73,7 @@ public class FileUploadController {
 	public String handleFileUpload(@RequestParam("file") MultipartFile[] files,
 			RedirectAttributes redirectAttributes) {
 		if (files.length == 0) return message(redirectAttributes, "Please choose a file before uploading!");
-		if (matrix1 != null && files.length > 1) return message(redirectAttributes, "You can only upload one more matrix");
+		if (TempStorage.getMatrix1() != null && files.length > 1) return message(redirectAttributes, "You can only upload one more matrix");
 		if (files.length > 2) return message(redirectAttributes, "Please choose no more than two files before uploading!");
 
 		String process;
@@ -111,10 +111,10 @@ public class FileUploadController {
 			String conversion = toInt(m, matrix);
 			if (!conversion.equals("")) return message(redirectAttributes, conversion);
 			// System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
-			if (matrix1 == null) {
-				matrix1 = m;
+			if (TempStorage.getMatrix1() == null) {
+				TempStorage.setMatrix1(m);
 			} else {
-				matrix2 = m;
+				TempStorage.setMatrix2(m);
 			}
 			return "";
 		}

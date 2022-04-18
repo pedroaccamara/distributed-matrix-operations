@@ -30,6 +30,8 @@ public class GRPCClientService {
 			.setB11(6)
 			.build());
 		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
+		int [][] m1 = TempStorage.getMatrix1();
+		resp = m1[0][0]+" "+m1[0][1]+"<br>"+m1[1][0]+" "+m1[1][1]+"\n";
 		return resp;
     }
     public String mult(){
