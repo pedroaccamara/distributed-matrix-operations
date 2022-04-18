@@ -22,4 +22,12 @@ public class PingPongEndpoint {
 	public String mult() {
 		return grpcClientService.mult();
 	}
+    @GetMapping("/biggerAdd")
+	public String biggerAdd() {
+		return grpcClientService.biggerAdd();
+	}
+	@GetMapping("/biggerMult")
+	public String biggerMult() {
+		return grpcClientService.biggerMult();
+	}
 }

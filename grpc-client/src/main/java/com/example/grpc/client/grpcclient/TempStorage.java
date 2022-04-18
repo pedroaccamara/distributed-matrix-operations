@@ -4,6 +4,16 @@ public class TempStorage {
 	
 	public static int[][] matrix1;
 	public static int[][] matrix2;
+	private static String[] internalIPs = {
+		"10.128.0.4",
+		"10.128.0.5",
+		"10.128.0.6",
+		"10.128.0.7",
+		"10.128.0.8",
+		"10.128.0.9",
+		"10.128.0.10",
+		"10.128.0.11"
+	};
 
 	public static int[][] getMatrix1() {
 		return matrix1;
@@ -17,4 +27,9 @@ public class TempStorage {
 	public static void setMatrix2(int[][] m) {
 		matrix2 = m;
 	}
+	public static String getInternalIP(int i) {
+		return internalIPs[i];
+	}
+
+
 }
