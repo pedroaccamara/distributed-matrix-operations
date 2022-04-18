@@ -14,41 +14,45 @@ import org.springframework.stereotype.Service;
 @Service
 public class GRPCClientService {
     public String add(){
+		int [][] m1 = TempStorage.getMatrix1();
+		int [][] m2 = TempStorage.getMatrix2();
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost",9090)
 		.usePlaintext()
 		.build();
 		MatrixServiceGrpc.MatrixServiceBlockingStub stub
 		 = MatrixServiceGrpc.newBlockingStub(channel);
 		MatrixReply A=stub.addBlock(MatrixRequest.newBuilder()
-			.setA00(1)
-			.setA01(2)
-			.setA10(5)
-			.setA11(6)
-			.setB00(1)
-			.setB01(2)
-			.setB10(5)
-			.setB11(6)
+			.setA00(m1[0][0])
+			.setA01(m1[0][1])
+			.setA10(m1[1][0])
+			.setA11(m1[1][1])
+			.setB00(m2[0][0])
+			.setB01(m2[0][1])
+			.setB10(m2[1][0])
+			.setB11(m2[1][1])
 			.build());
+			
+			// all operations needed * time of a function call / deadline
 		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
-		int [][] m1 = TempStorage.getMatrix1();
-		resp = m1[0][0]+" "+m1[0][1]+"<br>"+m1[1][0]+" "+m1[1][1]+"\n";
 		return resp;
     }
     public String mult(){
-    		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost",9090)
-    		.usePlaintext()
-    		.build();
-    		MatrixServiceGrpc.MatrixServiceBlockingStub stub
-    		 = MatrixServiceGrpc.newBlockingStub(channel);
-    		MatrixReply A=stub.multiplyBlock(MatrixRequest.newBuilder()
-    			.setA00(1)
-    			.setA01(2)
-    			.setA10(5)
-			.setA11(6)
-			.setB00(2)
-			.setB01(3)
-			.setB10(6)
-			.setB11(7)
+		int [][] m1 = TempStorage.getMatrix1();
+		int [][] m2 = TempStorage.getMatrix2();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost",9090)
+		.usePlaintext()
+		.build();
+		MatrixServiceGrpc.MatrixServiceBlockingStub stub
+			= MatrixServiceGrpc.newBlockingStub(channel);
+		MatrixReply A=stub.multiplyBlock(MatrixRequest.newBuilder()
+			.setA00(m1[0][0])
+			.setA01(m1[0][1])
+			.setA10(m1[1][0])
+			.setA11(m1[1][1])
+			.setB00(m2[0][0])
+			.setB01(m2[0][1])
+			.setB10(m2[1][0])
+			.setB11(m2[1][1])
 			.build());
 		String resp= A.getC00()+A.getC01()+A.getC10()+A.getC11()+"";
 		return resp;
