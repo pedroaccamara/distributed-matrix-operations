@@ -32,8 +32,7 @@ public class GRPCClientService {
 			.setB11(m2[1][1])
 			.build());
 			
-			// all operations needed * time of a function call / deadline
-		System.out.println("Filled A's stub with " + m1[1][1] + " and " + m2[1][1]);
+		// all operations needed * time of a function call / deadline
 		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
 		return resp;
     }
@@ -55,7 +54,7 @@ public class GRPCClientService {
 			.setB10(m2[1][0])
 			.setB11(m2[1][1])
 			.build());
-		String resp= A.getC00()+A.getC01()+A.getC10()+A.getC11()+"";
+		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
 		return resp;
     }
 }
