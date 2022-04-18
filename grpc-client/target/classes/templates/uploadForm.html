@@ -71,13 +71,19 @@
 			let form = document.getElementById("submittionForm");
 			let add = document.getElementById("add");
 			let mult = document.getElementById("mult");
+			if (form !== null) {
 			form.onsubmit = function(event){
 				console.log(document.getElementById("fileInput"));
 				console.log("Or the files");
 				console.log(document.getElementById("fileInput").files);
+				console.log(document.getElementById("fileInput").files.constructor.name);
+				console.log("Or one of the files");
+				console.log(document.getElementById("fileInput").files[0]);
+				console.log(document.getElementById("fileInput").files[0].constructor.name);
 				if (prev) event.preventDefault();
 				prev = false;
 			};
+			}
 			if (add !== null) { // These are null when the array of files is still smaller than two
 			add.onsubmit = function(event){
 				console.log(add.firstChild);
