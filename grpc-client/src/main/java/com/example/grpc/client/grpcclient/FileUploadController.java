@@ -82,6 +82,7 @@ public class FileUploadController {
 			if (process != "") return process;
 			storageService.store(file);
 		}
+		if (files.length == 1) return message(redirectAttributes, "You successfully uploaded " + files[0].getOriginalFilename() + "!");
 		return message(redirectAttributes, "You successfully uploaded " + files[0].getOriginalFilename() + " and " + files[1].getOriginalFilename() + "!");
 	}
 
