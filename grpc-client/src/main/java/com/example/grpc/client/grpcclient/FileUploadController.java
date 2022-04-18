@@ -112,10 +112,8 @@ public class FileUploadController {
 			if (!conversion.equals("")) return message(redirectAttributes, conversion);
 			// System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
 			if (TempStorage.getMatrix1() == null) {
-				System.out.println("About to set matrix1 with 11" + m[1][1]);
 				TempStorage.setMatrix1(m);
 			} else {
-				System.out.println("About to set matrix2 with 11" + m[1][1]);
 				TempStorage.setMatrix2(m);
 			}
 			return "";
