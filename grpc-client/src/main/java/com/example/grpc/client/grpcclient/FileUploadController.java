@@ -110,8 +110,7 @@ public class FileUploadController {
 			if (!sidesSquared(m)) return message(redirectAttributes, "Matrix's sides aren't a perfect square");
 			String conversion = toInt(m, matrix);
 			if (!conversion.equals("")) return message(redirectAttributes, conversion);
-			System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
-			System.out.println("And empty int[][] is : " + matrix2);
+			// System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
 			if (matrix1 == null) {
 				matrix1 = m;
 			} else {

@@ -31,7 +31,7 @@
 			</form>
 			<table th:if="${#arrays.length(#arrays.toArray(files))} == 2">
 				<tr>
-					<td><form id="add"><input type="submit" value="Add" /></form></td><td><form id="mult"><input type="submit" value="Mult" /></form></td>
+					<td><form id="add" method="GET" action="/add"><input type="submit" value="Add" /></form></td><td><form id="mult" method="GET" action="/mult"><input type="submit" value="Mult" /></form></td>
 				</tr>
 			</table>
 		</div>
@@ -64,41 +64,43 @@
 		var filesStrings = /*[[${#arrays.toStringArray(files)}]]*/ StringArrayofFiles;
 		console.log(files);
 		console.log(filesStrings);
-		window.onload = function(){
-			let prev = true;
-			let prev1 = true;
-			let prev2 = true;
-			let form = document.getElementById("submittionForm");
-			let add = document.getElementById("add");
-			let mult = document.getElementById("mult");
-			if (form !== null) {
-			form.onsubmit = function(event){
-				console.log(document.getElementById("fileInput"));
-				console.log("Or the files");
-				console.log(document.getElementById("fileInput").files);
-				console.log(document.getElementById("fileInput").files.constructor.name);
-				console.log("Or one of the files");
-				console.log(document.getElementById("fileInput").files[0]);
-				console.log(document.getElementById("fileInput").files[0].constructor.name);
-				if (prev) event.preventDefault();
-				prev = false;
-			};
-			}
-			if (add !== null) { // These are null when the array of files is still smaller than two
-			add.onsubmit = function(event){
-				console.log(add.firstChild);
-				if (prev1) event.preventDefault();
-				prev1 = false;
-			};
-			}
-			if (mult !== null) {
-			mult.onsubmit = function(event){
-				console.log(document.getElementById("fileInput"));
-				if (prev2) event.preventDefault();
-				prev2 = false;
-			};
-			}
-		};
+		// window.onload = function(){
+		// 	let prev = true;
+		// 	let prev1 = true;
+		// 	let prev2 = true;
+		// 	let form = document.getElementById("submittionForm");
+		// 	let add = document.getElementById("add");
+		// 	let mult = document.getElementById("mult");
+		// 	if (form !== null) {
+		// 	form.onsubmit = function(event){
+		// 		console.log(document.getElementById("fileInput"));
+		// 		console.log("Or the files");
+		// 		console.log(document.getElementById("fileInput").files);
+		// 		console.log(document.getElementById("fileInput").files.constructor.name);
+		// 		console.log("Or one of the files");
+		// 		console.log(document.getElementById("fileInput").files[0]);
+		// 		console.log(document.getElementById("fileInput").files[0].constructor.name);
+		// 		if (prev) event.preventDefault();
+		// 		prev = false;
+		// 	};
+		// 	}
+		// 	if (add !== null) { // These are null when the array of files is still smaller than two
+		// 	add.onsubmit = function(event){
+		// 		let files = new FileList();
+		// 		let file1 = new File(); // Get file objectsss
+		// 		console.log(add.firstChild);
+		// 		if (prev1) event.preventDefault();
+		// 		prev1 = false;
+		// 	};
+		// 	}
+		// 	if (mult !== null) {
+		// 	mult.onsubmit = function(event){
+		// 		console.log(document.getElementById("fileInput"));
+		// 		if (prev2) event.preventDefault();
+		// 		prev2 = false;
+		// 	};
+		// 	}
+		// };
 	</script>
 
 </body>
