@@ -75,8 +75,9 @@ public class GRPCClientService {
 		int [][] m2 = TempStorage.getMatrix2();
 		int [][][] blocksM1 = getBlocks(m1);
 		int [][][] blocksM2 = getBlocks(m2);
-		int [][][] resultM = zeroedM(blocksM1.length);
-		int sideBlocks = (int) Math.sqrt(blocksM1.length);
+		int noBlocks = blocksM1.length;
+		int [][][] resultM = zeroedM(noBlocks);
+		int sideBlocks = (int) Math.sqrt(noBlocks);
 
 		MatrixServiceGrpc.MatrixServiceBlockingStub[] stubs = new MatrixServiceGrpc.MatrixServiceBlockingStub[8];
 		for (int i = 0; i < 8; i++) { // Getting the 8 stubs for each running server
@@ -87,7 +88,11 @@ public class GRPCClientService {
 		}
 		int[][] respM = new int[sideBlocks*2][sideBlocks*2];
 		int stubI = 0; // Index to loop through the available stubs
-		for (int b = 0; b < blocksM1.length; b++) {
+		int serversUsed = 1;
+		long footprint = 0;
+		long start;
+		int deadline = 100; // Hard coded for now but will become something received from the post method
+		for (int b = 0; b < noBlocks; b++) {
 			int r = Math.floorDiv(b, sideBlocks)*sideBlocks; // Starting index for row involved in calc of block b (increments by 1)
 			int c = b%sideBlocks; // Starting index for col elements involved in calc of block b (increments by sideBlocks)
 
@@ -103,9 +108,17 @@ public class GRPCClientService {
 			// and it would be calculated from A00*B00 + A01*B10 in such a way that the formula will be (with some pseudo code)
 			// resultM[b] += blocksM1[r+i]*blocksM2[c+i*sideBlocks] for (i : sideBlocks)
 			for (int i = 0; i<sideBlocks; i++) {
-				MatrixReply multResult = multBlocks(stubs[stubI%8], blocksM1[r+i], blocksM2[c+i*sideBlocks]);
+				if (footprint == 0) start = System.nanoTime();
+				MatrixReply multResult = multBlocks(stubs[stubI%serversUsed], blocksM1[r+i], blocksM2[c+i*sideBlocks]);
+				if (footprint == 0) {
+					footprint = System.nanoTime() - start;
+					System.out.println("Got a footprint of " + footprint);
+					int serverCalls = noBlocks*2*sideBlocks; // The bigger loop iterates noBlocks times and the smaller loop makes 2 serverCalls, sideBlocks times
+					serversUsed = Math.min(8, (int) footprint*serverCalls/deadline);
+					System.out.println("Chose a number of " + serversUsed + " servers");
+				}
 				int [][] resultBlock = new int[][]{{multResult.getC00(), multResult.getC01()}, {multResult.getC10(), multResult.getC11()}};
-				MatrixReply updatedBlock = addBlocks(stubs[(stubI+1)%8], resultM[b], resultBlock);
+				MatrixReply updatedBlock = addBlocks(stubs[(stubI+1)%serversUsed], resultM[b], resultBlock);
 				resultM[b] = new int[][]{{updatedBlock.getC00(), updatedBlock.getC01()}, {updatedBlock.getC10(), updatedBlock.getC11()}};
 				stubI += 2; // Since we used a stub for the multiplication then another for the addition
 			}

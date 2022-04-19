@@ -2,7 +2,6 @@ package com.example.grpc.client.grpcclient;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -110,10 +109,11 @@ public class FileUploadController {
 			if (!sidesSquared(m)) return message(redirectAttributes, "Matrix's sides aren't a perfect square");
 			String conversion = toInt(m, matrix);
 			if (!conversion.equals("")) return message(redirectAttributes, conversion);
-			// System.out.println("And converted to int successfuly: " + Arrays.deepToString(m));
 			if (TempStorage.getMatrix1() == null) {
 				TempStorage.setMatrix1(m);
 			} else {
+				int size = TempStorage.getMatrix1().length;
+				if (m.length != size) return message(redirectAttributes, "Make sure you upload matrices of the same size!\nThe first matrix was " + size + "x" + size);
 				TempStorage.setMatrix2(m);
 			}
 			return "";
