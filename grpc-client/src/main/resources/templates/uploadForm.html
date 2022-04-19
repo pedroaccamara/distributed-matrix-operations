@@ -31,10 +31,10 @@
 			</form>
 			<table th:if="${#arrays.length(#arrays.toArray(files))} == 2">
 				<tr>
-					<td><form id="add" method="GET" action="/add"><input type="submit" value="Add" /></form></td><td><form id="mult" method="GET" action="/mult"><input type="submit" value="Mult" /></form></td>
+					<td><form id="add" method="GET" action="/add"><input type="submit" value="Add" /></form></td><td><form id="mult" method="GET" action="/mult"><input type="submit" value="Mult" /></form><td><form id="multy" method="GET" action="/multy"><input type="submit" value="Multy" /></form></td>
 				</tr>
 			</table>
-			<form th:unless="${#arrays.length(#arrays.toArray(files))} == 0" method="DELETE" enctype="multipart/form-data" action="/delete">
+			<form th:unless="${#arrays.length(#arrays.toArray(files))} == 0" action="/delete">
 				<input type="submit" value="Delete Files" />
 			</form>
 		</div>
@@ -74,6 +74,7 @@
 			let form = document.getElementById("submittionForm");
 			let add = document.getElementById("add");
 			let mult = document.getElementById("mult");
+			let multy = document.getElementById("multy");
 			// if (form !== null) {
 			// form.onsubmit = function(event){
 			// 	console.log(document.getElementById("fileInput"));
@@ -96,11 +97,21 @@
 			// 	prev1 = false;
 			// };
 			// }
-			if (mult !== null) {
-			mult.onsubmit = function(event){
+			if (multy !== null) {
+			multy.onsubmit = function(event){
 				event.preventDefault();
-				let deadline = prompt("Choose a deadline");
+				let deadline = prompt("Choose a deadline in seconds");
 				console.log(`User chose a ${deadline} deadline`);
+				console.log(multy)
+				
+				// Create an input element for Full Name
+				let inputDeadline = document.createElement("input");
+				inputDeadline.setAttribute("type", "text");
+				inputDeadline.setAttribute("name", "deadline");
+				inputDeadline.setAttribute("value", deadline);
+				mult.childNodes = [inputDeadline] + mult.childNodes;
+				// mult.appendChild(inputDeadline);
+				console.log(multy);
 				if (prev2) event.preventDefault();
 				prev2 = false;
 			};
