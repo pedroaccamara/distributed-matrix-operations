@@ -3,6 +3,7 @@ package com.example.grpc.client.grpcclient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,11 +27,12 @@ public class PingPongEndpoint {
 		return grpcClientService.add();
 	}
 	@PostMapping("/mult")
-	public String mult(RedirectAttributes redirectAttributes) {
+	public String mult(@RequestParam("deadline") String deadline, RedirectAttributes redirectAttributes) {
 		if (!TempStorage.getInitialised()) {
 			redirectAttributes.addFlashAttribute("message", "Matrices have to be uploaded beforehand!");
 			return "redirect:/";
 		}
+		System.out.println("Got a deadline of " + deadline + " on the backend!");
 		if (TempStorage.getMatrix2().length > 2) return grpcClientService.biggerMult();
 		return grpcClientService.mult();
 	}
