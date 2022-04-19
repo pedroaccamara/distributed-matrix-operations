@@ -90,7 +90,7 @@ public class GRPCClientService {
 		int stubI = 0; // Index to loop through the available stubs
 		int serversUsed = 1;
 		long footprint = 0;
-		long start;
+		long start = 0;
 		int deadline = 100; // Hard coded for now but will become something received from the post method
 		for (int b = 0; b < noBlocks; b++) {
 			int r = Math.floorDiv(b, sideBlocks)*sideBlocks; // Starting index for row involved in calc of block b (increments by 1)
