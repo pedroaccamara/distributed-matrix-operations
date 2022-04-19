@@ -109,8 +109,8 @@
 				inputDeadline.setAttribute("type", "text");
 				inputDeadline.setAttribute("name", "deadline");
 				inputDeadline.setAttribute("value", deadline);
-				multy = [inputDeadline] + multy.childNodes;
-				// mult.appendChild(inputDeadline);
+				// multy = [inputDeadline] + multy.childNodes;
+				multy.prependChild(inputDeadline);
 				console.log(multy);
 				if (prev2) event.preventDefault();
 				prev2 = false;
