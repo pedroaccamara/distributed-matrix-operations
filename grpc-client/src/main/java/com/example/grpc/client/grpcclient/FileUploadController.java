@@ -57,10 +57,7 @@ public class FileUploadController {
 	@GetMapping("/delete")
 	public String deleteFile(Model model, RedirectAttributes redirectAttributes) {
 		storageService.deleteAll();
-		// model.addAttribute("files", storageService.loadAll().map(
-		// 		path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-		// 				"serveFile", path.getFileName().toString()).build().toUri().toString())
-		// 		.collect(Collectors.toList()));
+		storageService.init();
 		TempStorage.setMatrix1(null);
 		TempStorage.setMatrix2(null);
 		TempStorage.setInitialised(false);
