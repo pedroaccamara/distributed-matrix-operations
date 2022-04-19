@@ -91,7 +91,7 @@ public class GRPCClientService {
 		int serversUsed = 1;
 		long footprint = 0;
 		long start = 0;
-		long deadline = 5000*1000000; // Hard coded reasonable deadline for now but will become something received from the post method
+		long deadline = TempStorage.getDeadline(); // Hard coded reasonable deadline for now but will become something received from the post method
 		for (int b = 0; b < noBlocks; b++) {
 			int r = Math.floorDiv(b, sideBlocks)*sideBlocks; // Starting index for row involved in calc of block b (increments by 1)
 			int c = b%sideBlocks; // Starting index for col elements involved in calc of block b (increments by sideBlocks)
@@ -113,9 +113,9 @@ public class GRPCClientService {
 				MatrixReply multResult = multBlocks(stubs[stub], blocksM1[r+i], blocksM2[c+i*sideBlocks]);
 				if (footprint == 0) {
 					footprint = System.nanoTime() - start;
-					System.out.println("Got a footprint of " + footprint); // 1250000000
+					System.out.println("Got a footprint of " + footprint); // 1250000000; 942601805;
 					int serverCalls = noBlocks*2*sideBlocks; // The bigger loop iterates noBlocks times and the smaller loop makes 2 serverCalls, sideBlocks times
-					serversUsed = Math.min(8, (int) (footprint*serverCalls/deadline)); // 20,000,000,000/5,000,000,000
+					serversUsed = Math.min(8, (int) (footprint*serverCalls/deadline)); // 20,000,000,000/10,000,000,000
 					System.out.println("Chose a number of " + serversUsed + " servers");
 				}
 				int [][] resultBlock = new int[][]{{multResult.getC00(), multResult.getC01()}, {multResult.getC10(), multResult.getC11()}};

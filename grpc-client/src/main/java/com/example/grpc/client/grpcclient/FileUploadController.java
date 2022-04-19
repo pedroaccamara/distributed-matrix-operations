@@ -115,6 +115,7 @@ public class FileUploadController {
 				int size = TempStorage.getMatrix1().length;
 				if (m.length != size) return message(redirectAttributes, "Make sure you upload matrices of the same size!\nThe first matrix was " + size + "x" + size);
 				TempStorage.setMatrix2(m);
+				TempStorage.setInitialised(true);
 			}
 			return "";
 		}
