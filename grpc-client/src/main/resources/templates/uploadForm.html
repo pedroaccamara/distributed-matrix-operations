@@ -98,22 +98,20 @@
 			// };
 			// }
 
-			// if (multy !== null) {
-			// multy.onsubmit = function(event){
-			// 	event.preventDefault();
-			// 	let deadline = prompt("Choose a deadline in seconds");
-			// 	console.log(`User chose a ${deadline} deadline`);
-			// 	console.log(multy)
+			if (mult !== null) {
+			mult.onsubmit = function(event){
+				event.preventDefault();
+				let deadline = prompt("Choose a deadline in seconds");
 				
-			// 	// Create an input element for Full Name
-			// 	let inputDeadline = document.createElement("input");
-			// 	inputDeadline.setAttribute("type", "text");
-			// 	inputDeadline.setAttribute("name", "deadline");
-			// 	inputDeadline.setAttribute("value", deadline);
-			// 	multy.insertBefore(inputDeadline, multy.children[0]);
-			// 	multy.submit();
-			// };
-			// }
+				// Create an input element for Full Name
+				let inputDeadline = document.createElement("input");
+				inputDeadline.setAttribute("type", "text");
+				inputDeadline.setAttribute("name", "deadline");
+				inputDeadline.setAttribute("value", deadline);
+				mult.insertBefore(inputDeadline, mult.children[0]);
+				mult.submit();
+			};
+			}
 		};
 	</script>
 
