@@ -4,7 +4,6 @@ public class TempStorage {
 	
 	private static int[][] matrix1;
 	private static int[][] matrix2;
-	private static long deadline = 10000000000l;
 	private static boolean initialised = false;
 	private static String[] internalIPs = {
 		"10.128.0.4",
@@ -35,9 +34,6 @@ public class TempStorage {
 	public static void setInitialised(boolean b) {
 		initialised = b;
 		return;
-	}
-	public static long getDeadline() {
-		return deadline;
 	}
 	public static String getInternalIP(int i) {
 		return internalIPs[i];

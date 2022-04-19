@@ -32,8 +32,7 @@ public class PingPongEndpoint {
 			redirectAttributes.addFlashAttribute("message", "Matrices have to be uploaded beforehand!");
 			return "redirect:/";
 		}
-		System.out.println("Got a deadline of " + deadline + " on the backend!");
-		if (TempStorage.getMatrix2().length > 2) return grpcClientService.biggerMult();
+		if (TempStorage.getMatrix2().length > 2) return grpcClientService.biggerMult(deadline);
 		return grpcClientService.mult();
 	}
 }

@@ -70,7 +70,7 @@ public class GRPCClientService {
 		return htmlStringify(respM);
     }
 
-    public String biggerMult(){ // For strictly bigger than 2*2 matrices
+    public String biggerMult(String dline){ // For strictly bigger than 2*2 matrices
 		int [][] m1 = TempStorage.getMatrix1();
 		int [][] m2 = TempStorage.getMatrix2();
 		int [][][] blocksM1 = getBlocks(m1);
@@ -91,7 +91,7 @@ public class GRPCClientService {
 		int serversUsed = 1;
 		long footprint = 0;
 		long start = 0;
-		long deadline = TempStorage.getDeadline(); // Hard coded reasonable deadline for now but will become something received from the post method
+		long deadline = Integer.parseInt(dline) * 1000000000; // Hard coded reasonable deadline for now but will become something received from the post method
 		for (int b = 0; b < noBlocks; b++) {
 			int r = Math.floorDiv(b, sideBlocks)*sideBlocks; // Starting index for row involved in calc of block b (increments by 1)
 			int c = b%sideBlocks; // Starting index for col elements involved in calc of block b (increments by sideBlocks)
