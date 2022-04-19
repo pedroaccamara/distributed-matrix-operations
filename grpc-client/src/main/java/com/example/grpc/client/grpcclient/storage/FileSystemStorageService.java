@@ -59,7 +59,8 @@ public class FileSystemStorageService implements StorageService {
 				.map(this.rootLocation::relativize);
 		}
 		catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
+			// throw new StorageException("Failed to read stored files", e);
+			return null;
 		}
 
 	}
