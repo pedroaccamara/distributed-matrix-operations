@@ -69,7 +69,7 @@ public class GRPCClientService {
 
 		return htmlStringify(respM);
     }
-	
+
     public String biggerMult(){ // For strictly bigger than 2*2 matrices
 		int [][] m1 = TempStorage.getMatrix1();
 		int [][] m2 = TempStorage.getMatrix2();
@@ -103,7 +103,10 @@ public class GRPCClientService {
 			// and it would be calculated from A00*B00 + A01*B10 in such a way that the formula will be (with some pseudo code)
 			// resultM[b] += blocksM1[r+i]*blocksM2[c+i*sideBlocks] for (i : sideBlocks)
 			for (int i = 0; i<sideBlocks; i++) {
-				resultM[b] = addBlocks(stubs[(stubI+1)%8], resultM[b], multBlocks(stubs[stubI%8], blocksM1[r+i], blocksM2[c+i*sideBlocks]));
+				MatrixReply multResult = multBlocks(stubs[stubI%8], blocksM1[r+i], blocksM2[c+i*sideBlocks]);
+				int [][] resultBlock = new int[][]{{multResult.getC00(), multResult.getC01()}, {multResult.getC10(), multResult.getC11()}};
+				MatrixReply updatedBlock = addBlocks(stubs[(stubI+1)%8], resultM[b], resultBlock);
+				resultM[b] = new int[][]{{updatedBlock.getC00(), updatedBlock.getC01()}, {updatedBlock.getC10(), updatedBlock.getC11()}};
 				stubI += 2; // Since we used a stub for the multiplication then another for the addition
 			}
 
@@ -134,7 +137,7 @@ public class GRPCClientService {
 	}
 
 	public MatrixReply multBlocks(MatrixServiceGrpc.MatrixServiceBlockingStub stub, int[][] matrix1, int[][] matrix2) {
-		return stub.multBlock(MatrixRequest.newBuilder()
+		return stub.multiplyBlock(MatrixRequest.newBuilder()
 		.setA00(matrix1[0][0])
 		.setA01(matrix1[0][1])
 		.setA10(matrix1[1][0])
