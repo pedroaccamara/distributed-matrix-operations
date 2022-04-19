@@ -14,46 +14,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class GRPCClientService {
     public String add(){ // For just 2 simple 2*2 matrices
-		int [][] m1 = TempStorage.getMatrix1();
-		int [][] m2 = TempStorage.getMatrix2();
+		int [][] matrix1 = TempStorage.getMatrix1();
+		int [][] matrix2 = TempStorage.getMatrix2();
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost",9090)
 		.usePlaintext()
 		.build();
 		MatrixServiceGrpc.MatrixServiceBlockingStub stub
 		 = MatrixServiceGrpc.newBlockingStub(channel);
-		MatrixReply A=stub.addBlock(MatrixRequest.newBuilder()
-			.setA00(m1[0][0])
-			.setA01(m1[0][1])
-			.setA10(m1[1][0])
-			.setA11(m1[1][1])
-			.setB00(m2[0][0])
-			.setB01(m2[0][1])
-			.setB10(m2[1][0])
-			.setB11(m2[1][1])
-			.build());
+		
+		MatrixReply A = addBlocks(stub, matrix1, matrix2);
 			
 		// all operations needed * time of a function call / deadline
 		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
 		return resp;
     }
     public String mult(){ // For just 2 simple 2*2 matrices
-		int [][] m1 = TempStorage.getMatrix1();
-		int [][] m2 = TempStorage.getMatrix2();
+		int [][] matrix1 = TempStorage.getMatrix1();
+		int [][] matrix2 = TempStorage.getMatrix2();
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost",9090)
 		.usePlaintext()
 		.build();
 		MatrixServiceGrpc.MatrixServiceBlockingStub stub
 			= MatrixServiceGrpc.newBlockingStub(channel);
-		MatrixReply A=stub.multiplyBlock(MatrixRequest.newBuilder()
-			.setA00(m1[0][0])
-			.setA01(m1[0][1])
-			.setA10(m1[1][0])
-			.setA11(m1[1][1])
-			.setB00(m2[0][0])
-			.setB01(m2[0][1])
-			.setB10(m2[1][0])
-			.setB11(m2[1][1])
-			.build());
+		MatrixReply A = multBlocks(stub, matrix1, matrix2);
+
 		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
 		return resp;
     }
@@ -73,16 +57,7 @@ public class GRPCClientService {
 		}
 		int[][] respM = new int[sideBlocks*2][sideBlocks*2];
 		for (int b = 0; b < blocksM1.length; b++) {
-			MatrixReply M=stubs[b%8].addBlock(MatrixRequest.newBuilder()
-			.setA00(blocksM1[b][0][0])
-			.setA01(blocksM1[b][0][1])
-			.setA10(blocksM1[b][1][0])
-			.setA11(blocksM1[b][1][1])
-			.setB00(blocksM2[b][0][0])
-			.setB01(blocksM2[b][0][1])
-			.setB10(blocksM2[b][1][0])
-			.setB11(blocksM2[b][1][1])
-			.build());
+			MatrixReply M = addBlocks(stubs[b%8], blocksM1[b], blocksM2[b]);
 
 			int xOffset = (b % sideBlocks)*2;
 			int yOffset = Math.floorDiv(b, sideBlocks)*2;
@@ -91,37 +66,87 @@ public class GRPCClientService {
 			respM[yOffset+1][xOffset] = M.getC10();
 			respM[yOffset+1][xOffset+1] = M.getC11();
 		}
-		String resp = "";
-		for (int[] row : respM) {
-			resp += "" + row[0];
-			for(int col = 1; col<row.length; col++)
-				resp += " " + row[col];
-			resp += "<br>";
-		}
-		return resp;
+
+		return htmlStringify(respM);
     }
+	
     public String biggerMult(){ // For strictly bigger than 2*2 matrices
 		int [][] m1 = TempStorage.getMatrix1();
 		int [][] m2 = TempStorage.getMatrix2();
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost",9090)
-		.usePlaintext()
-		.build();
-		MatrixServiceGrpc.MatrixServiceBlockingStub stub
-			= MatrixServiceGrpc.newBlockingStub(channel);
-		MatrixReply A=stub.multiplyBlock(MatrixRequest.newBuilder()
-			.setA00(m1[0][0])
-			.setA01(m1[0][1])
-			.setA10(m1[1][0])
-			.setA11(m1[1][1])
-			.setB00(m2[0][0])
-			.setB01(m2[0][1])
-			.setB10(m2[1][0])
-			.setB11(m2[1][1])
-			.build());
-		String resp= A.getC00()+" "+A.getC01()+"<br>"+A.getC10()+" "+A.getC11()+"\n";
-		return resp;
+		int [][][] blocksM1 = getBlocks(m1);
+		int [][][] blocksM2 = getBlocks(m2);
+		int [][][] resultM = zeroedM(blocksM1.length);
+		int sideBlocks = (int) Math.sqrt(blocksM1.length);
+
+		MatrixServiceGrpc.MatrixServiceBlockingStub[] stubs = new MatrixServiceGrpc.MatrixServiceBlockingStub[8];
+		for (int i = 0; i < 8; i++) { // Getting the 8 stubs for each running server
+			ManagedChannel channel = ManagedChannelBuilder.forAddress(TempStorage.getInternalIP(i),9090)
+			.usePlaintext()
+			.build();
+			stubs[i] = MatrixServiceGrpc.newBlockingStub(channel);
+		}
+		int[][] respM = new int[sideBlocks*2][sideBlocks*2];
+		int stubI = 0; // Index to loop through the available stubs
+		for (int b = 0; b < blocksM1.length; b++) {
+			int r = Math.floorDiv(b, sideBlocks)*sideBlocks; // Starting index for row involved in calc of block b (increments by 1)
+			int c = b%sideBlocks; // Starting index for col elements involved in calc of block b (increments by sideBlocks)
+
+			// If there are 2 blocks per side
+			// C00 will be comprised of the addition of sideBlocks (2) multiplications
+			// In this case those 2 multiplications will be A00*B00 and A01*B10
+			// If the side of the matrices (sideBlocks) consisted of 4 blocks
+			// C00 would again consist of the addition of 4 multiplications
+			// So in this for loop we will perform sideBlock multiplications and add them all together
+			// As for the result block these multiplications will be added and contribute to
+			// (C00) since we'll keep the result blocks as well in an array of blocks, can be accessed
+			// by the index b of the loop we're already in. C00 would be accessed by resultM[0]
+			// and it would be calculated from A00*B00 + A01*B10 in such a way that the formula will be (with some pseudo code)
+			// resultM[b] += blocksM1[r+i]*blocksM2[c+i*sideBlocks] for (i : sideBlocks)
+			for (int i = 0; i<sideBlocks; i++) {
+				resultM[b] = addBlocks(stubs[(stubI+1)%8], resultM[b], multBlocks(stubs[stubI%8], blocksM1[r+i], blocksM2[c+i*sideBlocks]));
+				stubI += 2; // Since we used a stub for the multiplication then another for the addition
+			}
+
+			// Preparing an already 2 dimensional matrix for converting that to a string response in a O(sideBlocks^2) time complexity
+			int xOffset = (b % sideBlocks)*2;
+			int yOffset = Math.floorDiv(b, sideBlocks)*2;
+			respM[yOffset][xOffset] = resultM[b][0][0];
+			respM[yOffset][xOffset+1] = resultM[b][0][1];
+			respM[yOffset+1][xOffset] = resultM[b][1][0];
+			respM[yOffset+1][xOffset+1] = resultM[b][1][1];
+		}
+
+		// Converting the prepared respM matrix to an html compatible string response
+		return htmlStringify(respM);
     }
 
+	public MatrixReply addBlocks(MatrixServiceGrpc.MatrixServiceBlockingStub stub, int[][] matrix1, int[][] matrix2) {
+		return stub.addBlock(MatrixRequest.newBuilder()
+		.setA00(matrix1[0][0])
+		.setA01(matrix1[0][1])
+		.setA10(matrix1[1][0])
+		.setA11(matrix1[1][1])
+		.setB00(matrix2[0][0])
+		.setB01(matrix2[0][1])
+		.setB10(matrix2[1][0])
+		.setB11(matrix2[1][1])
+		.build());
+	}
+
+	public MatrixReply multBlocks(MatrixServiceGrpc.MatrixServiceBlockingStub stub, int[][] matrix1, int[][] matrix2) {
+		return stub.multBlock(MatrixRequest.newBuilder()
+		.setA00(matrix1[0][0])
+		.setA01(matrix1[0][1])
+		.setA10(matrix1[1][0])
+		.setA11(matrix1[1][1])
+		.setB00(matrix2[0][0])
+		.setB01(matrix2[0][1])
+		.setB10(matrix2[1][0])
+		.setB11(matrix2[1][1])
+		.build());
+	}
+
+	// Getting an array of 2x2 blocks from any 2 dimensional matrix
 	public int[][][] getBlocks(int[][] matrix) {
 		int noBlocks = matrix.length*matrix.length / 4;
 		int sideBlocks = matrix.length / 2;
@@ -137,5 +162,27 @@ public class GRPCClientService {
 		}
 
 		return blocks;
+	}
+
+	// Creating a 3 dimensional zero matrix of size s
+	public int[][][] zeroedM(int s) {
+		int[][][] matrix = new int[s][2][2];
+
+		for (int i = 0; i<s; i++) {
+			matrix[i] = new int[][]{{0,0}, {0,0}};
+		}
+		return matrix;
+	}
+
+	// Converting the prepared 2 dimensional matrix to an html compatible string response
+	public String htmlStringify(int[][] matrix) {
+		String resp = "";
+		for (int[] row : matrix) {
+			resp += "" + row[0];
+			for(int col = 1; col<row.length; col++)
+				resp += " " + row[col];
+			resp += "<br>";
+		}
+		return resp;
 	}
 }
