@@ -2,9 +2,9 @@ package com.example.grpc.client.grpcclient;
 
 public class TempStorage {
 	
-	public static int[][] matrix1;
-	public static int[][] matrix2;
-	private static long deadline = 10000*1000000;
+	private static int[][] matrix1;
+	private static int[][] matrix2;
+	private static long deadline = 10000000000l;
 	private static boolean initialised = false;
 	private static String[] internalIPs = {
 		"10.128.0.4",

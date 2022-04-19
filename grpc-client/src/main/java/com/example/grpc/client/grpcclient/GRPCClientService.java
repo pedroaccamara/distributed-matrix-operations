@@ -113,7 +113,7 @@ public class GRPCClientService {
 				MatrixReply multResult = multBlocks(stubs[stub], blocksM1[r+i], blocksM2[c+i*sideBlocks]);
 				if (footprint == 0) {
 					footprint = System.nanoTime() - start;
-					System.out.println("Got a footprint of " + footprint); // 1250000000; 942601805;
+					System.out.println("Got a footprint of " + footprint); // 1250000000; 942601805; 23109883; 333434742;
 					int serverCalls = noBlocks*2*sideBlocks; // The bigger loop iterates noBlocks times and the smaller loop makes 2 serverCalls, sideBlocks times
 					serversUsed = Math.min(8, (int) (footprint*serverCalls/deadline)); // 20,000,000,000/10,000,000,000
 					System.out.println("Chose a number of " + serversUsed + " servers");
