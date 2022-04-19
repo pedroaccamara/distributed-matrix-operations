@@ -31,7 +31,7 @@
 			</form>
 			<table th:if="${#arrays.length(#arrays.toArray(files))} == 2">
 				<tr>
-					<td><form id="add" method="GET" action="/add"><input type="submit" value="Add" /></form></td><td><form id="mult" method="GET" action="/mult"><input type="submit" value="Mult" /></form><td><form id="multy" method="GET" action="/multy"><input type="submit" value="Multy" /></form></td>
+					<td><form id="add" method="GET" action="/add"><input type="submit" value="Add" /></form></td><td><form id="mult" method="POST" action="/mult"><input type="submit" value="Mult" /></form></td>
 				</tr>
 			</table>
 			<form th:unless="${#arrays.length(#arrays.toArray(files))} == 0" action="/delete">
@@ -97,26 +97,23 @@
 			// 	prev1 = false;
 			// };
 			// }
-			
-			if (multy !== null) {
-			multy.onsubmit = function(event){
-				event.preventDefault();
-				let deadline = prompt("Choose a deadline in seconds");
-				console.log(`User chose a ${deadline} deadline`);
-				console.log(multy)
+
+			// if (multy !== null) {
+			// multy.onsubmit = function(event){
+			// 	event.preventDefault();
+			// 	let deadline = prompt("Choose a deadline in seconds");
+			// 	console.log(`User chose a ${deadline} deadline`);
+			// 	console.log(multy)
 				
-				// Create an input element for Full Name
-				let inputDeadline = document.createElement("input");
-				inputDeadline.setAttribute("type", "text");
-				inputDeadline.setAttribute("name", "deadline");
-				inputDeadline.setAttribute("value", deadline);
-				// multy = [inputDeadline] + multy.childNodes;
-				multy.insertBefore(inputDeadline, multy.children[0]);
-				console.log(multy);
-				if (prev2) event.preventDefault();
-				prev2 = false;
-			};
-			}
+			// 	// Create an input element for Full Name
+			// 	let inputDeadline = document.createElement("input");
+			// 	inputDeadline.setAttribute("type", "text");
+			// 	inputDeadline.setAttribute("name", "deadline");
+			// 	inputDeadline.setAttribute("value", deadline);
+			// 	multy.insertBefore(inputDeadline, multy.children[0]);
+			// 	multy.submit();
+			// };
+			// }
 		};
 	</script>
 
