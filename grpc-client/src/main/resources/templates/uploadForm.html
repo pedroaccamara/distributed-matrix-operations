@@ -23,17 +23,20 @@
 		</div>
 	
 		<div>
+			<!-- Only allow to submit files while there are still not 2 in storage -->
 			<form id="submittionForm" th:unless="${#arrays.length(#arrays.toArray(files))} == 2" method="POST" enctype="multipart/form-data" action="/">
 				<table>
 					<tr><td><input id="fileInput" type="file" name="file" multiple /></td></tr>
 					<tr><td><input id="submitFile" type="submit" value="Upload" /></td></tr>
 				</table>
 			</form>
+			<!-- Allow for addition and multiplication when the two input matrices are in storage -->
 			<table th:if="${#arrays.length(#arrays.toArray(files))} == 2">
 				<tr>
 					<td><form id="add" method="GET" action="/add"><input type="submit" value="Add" /></form></td><td><form id="mult" method="POST" action="/mult"><input type="submit" value="Mult" /></form></td>
 				</tr>
 			</table>
+			<!-- Deleting files is possible when there are more than 0 files -->
 			<form th:unless="${#arrays.length(#arrays.toArray(files))} == 0" action="/delete">
 				<input type="submit" value="Delete Files" />
 			</form>
@@ -46,20 +49,6 @@
 				</li>
 			</ul>
 		</div>
-	
-		<!-- <div>
-			<p>Testing stuff</p>
-			<p th:text="${files}">No dot</p>
-			<p th:text="${#arrays.length(#arrays.toArray(files))}">Object array</p>
-			<p th:text="${#arrays.length(#arrays.toStringArray(files))}">String array</p>
-			<p th:text="3==3">This will become "true"</p>
-			<div th:if="3==3">
-				<p>Expr was true</p>
-			</div>
-			<div th:each="file, iterStat : ${files}">
-				<p th:text="${iterStat.size}">iterStat size prop</p>
-			</div>
-		</div> -->
 	</main>
 
 	<script th:inline="javascript">
@@ -68,36 +57,9 @@
 		// console.log(files);
 		// console.log(filesStrings);
 		window.onload = function(){
-			let prev = true;
-			let prev1 = true;
-			let prev2 = true;
-			let form = document.getElementById("submittionForm");
-			let add = document.getElementById("add");
 			let mult = document.getElementById("mult");
-			let multy = document.getElementById("multy");
-			// if (form !== null) {
-			// form.onsubmit = function(event){
-			// 	console.log(document.getElementById("fileInput"));
-			// 	console.log("Or the files");
-			// 	console.log(document.getElementById("fileInput").files);
-			// 	console.log(document.getElementById("fileInput").files.constructor.name);
-			// 	console.log("Or one of the files");
-			// 	console.log(document.getElementById("fileInput").files[0]);
-			// 	console.log(document.getElementById("fileInput").files[0].constructor.name);
-			// 	if (prev) event.preventDefault();
-			// 	prev = false;
-			// };
-			// }
-			// if (add !== null) { // These are null when the array of files is still smaller than two
-			// add.onsubmit = function(event){
-			// 	let files = new FileList();
-			// 	let file1 = new File(); // Get file objectsss
-			// 	console.log(add.firstChild);
-			// 	if (prev1) event.preventDefault();
-			// 	prev1 = false;
-			// };
-			// }
 
+			// This is null when the array of files is still smaller than two
 			if (mult !== null) {
 			mult.onsubmit = function(event){
 				event.preventDefault();

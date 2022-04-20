@@ -26,8 +26,6 @@ import com.example.grpc.client.grpcclient.storage.StorageService;
 public class FileUploadController {
 
 	private final StorageService storageService;
-	// public int[][] matrix1;
-	// public int[][] matrix2;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -138,14 +136,16 @@ public class FileUploadController {
 		return "";
 	}
 
+	// Quickly check if by its sides a matrix is a square
 	private boolean square(int[][] m) {
 		return m.length == m[0].length;
 	}
 
+	// Check if the length of its sides are a number squared (or a perfect square)
 	private boolean sidesSquared(int[][] m) {
 		int side = m.length;
 		if (side != 0) {
-			while (true) {
+			while (true) { // The number should be divisible by 2 until it reaches 1
 				if (side % 2 == 0) {
 					side /= 2;
 					if (side == 1) return true;
