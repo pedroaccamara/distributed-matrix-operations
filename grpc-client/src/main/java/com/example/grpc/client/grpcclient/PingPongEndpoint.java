@@ -37,13 +37,15 @@ public class PingPongEndpoint {
 		if (TempStorage.getMatrix2().length > 2) return grpcClientService.biggerMult(deadline);
 		return grpcClientService.mult();
 	}
-	@GetMapping("/asyncMult")
-	public String asyncMult(RedirectAttributes redirectAttributes) throws InterruptedException {
-		if (!TempStorage.getInitialised()) {
-			redirectAttributes.addFlashAttribute("message", "Matrices have to be uploaded beforehand!");
-			return "redirect:/";
-		}
-		if (TempStorage.getMatrix2().length > 2) return grpcClientService.biggerAsyncMult();
-		return grpcClientService.mult();
-	}
+
+	// Ended up not implementing async because I couldn't make ReplyStreamObserver work
+	// @GetMapping("/asyncMult")
+	// public String asyncMult(RedirectAttributes redirectAttributes) throws InterruptedException {
+	// 	if (!TempStorage.getInitialised()) {
+	// 		redirectAttributes.addFlashAttribute("message", "Matrices have to be uploaded beforehand!");
+	// 		return "redirect:/";
+	// 	}
+	// 	if (TempStorage.getMatrix2().length > 2) return grpcClientService.biggerAsyncMult();
+	// 	return grpcClientService.mult();
+	// }
 }

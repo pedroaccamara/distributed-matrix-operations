@@ -1,13 +1,10 @@
 package com.example.grpc.client.grpcclient;
 import io.grpc.stub.StreamObserver;
 import com.example.grpc.server.grpcserver.MatrixReply;
-// import com.example.grpc.client.grpcclient.MatrixReply;
+
+// Class won't be used but many different attempts were tried
 
 public class ReplyStreamObserver implements StreamObserver<MatrixReply> {
-
-    public ReplyStreamObserver() {
-        return;
-    }
 
     @Override
     public void onNext(MatrixReply reply) {
