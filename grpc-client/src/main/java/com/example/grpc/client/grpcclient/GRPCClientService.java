@@ -6,6 +6,7 @@ import com.example.grpc.server.grpcserver.PingPongServiceGrpc;
 import com.example.grpc.server.grpcserver.MatrixRequest;
 import com.example.grpc.server.grpcserver.MatrixReply;
 import com.example.grpc.server.grpcserver.MatrixServiceGrpc;
+import io.grpc.stub.StreamObserver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Async;
 import io.grpc.ManagedChannel;
@@ -13,6 +14,8 @@ import io.grpc.ManagedChannelBuilder;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Service;
+
+import com.example.grpc.client.grpcclient.ReplyStreamObserver;
 
 @Service
 @EnableAsync
@@ -275,7 +278,8 @@ public class GRPCClientService {
 		.setB01(matrix2[0][1])
 		.setB10(matrix2[1][0])
 		.setB11(matrix2[1][1])
-		.build());
+		.build(),
+		new ReplyStreamObserver());
 	}
 
 	@Async
@@ -289,7 +293,8 @@ public class GRPCClientService {
 		.setB01(matrix2[0][1])
 		.setB10(matrix2[1][0])
 		.setB11(matrix2[1][1])
-		.build());
+		.build(),
+		new ReplyStreamObserver());
 	}
 
 	// Getting an array of 2x2 blocks from any 2 dimensional matrix
@@ -331,4 +336,76 @@ public class GRPCClientService {
 		}
 		return resp;
 	}
+
+
+	
+	
+// 	public StreamObserver<MatrixReply> clientSideStreaming(StreamObserver<StockQuote> responseObserver) {
+		
+// 		StreamObserver<MatrixReply> responseObserver = new new StreamObserver<Stock>() {
+// 			int count;
+// 			double price = 0.0;
+// 			StringBuffer sb = new StringBuffer();
+
+// 			@Override
+// 			public void onNext(MatrixReply message) {
+// 				price = +fetchStockPriceBid(stock);
+// 				sb.append(":")
+// 					.build(stock.getTickerSymbol());
+// 			}
+
+// 			@Override
+// 			public void onCompleted() {
+// 				responseObserver.onNext(StockQuote.newBuilder()
+// 					.setPrice(price / count)
+// 					.setDescription("Statistics-" + sb.toString())
+// 					.build());
+// 				responseObserver.onCompleted();
+// 			}
+// 		}
+// 	}
+// }
+
+// class StreamObserver<MatrixReply> {
+
+// 	@Override
+// 	public void onNext(MatrixReply reply) {
+// 		MatrixReply.newBuilder()
+// 		.build();
+// 	}
+
+// 	@Override
+// 	public void onCompleted() {
+// 		responseObserver.onNext(MatrixReply.newBuilder()
+// 			.setC00(reply.getC00())
+// 			.setC01(reply.getC01())
+// 			.setC10(reply.getC10())
+// 			.setC11(reply.getC11())
+// 			.build());
+// 		responseObserver.onCompleted();
+// 	}
+// });
+
+// class StreamObserver<MatrixReply> extends
+// @Override
+// public StreamObserver<MatrixReply> streamingInputCall(final StreamObserver<MatrixReply> responseObserver) {
+// 	return new StreamObserver<MatrixReply>() {
+// 		private int totalPayloadSize;
+
+// 		@Override
+// 		public void onNext(MatrixReply message) {
+// 			totalPayloadSize += message.getPayload().getBody().size();
+// 		}
+
+// 		@Override
+// 		public void onCompleted() {
+// 			responseObserver.onNext(MatrixReply.newBuilder().setAggregatedPayloadSize(totalPayloadSize).build());
+// 			responseObserver.onCompleted();
+// 		}
+
+// 		@Override
+// 		public void onError(Throwable cause) {
+// 			responseObserver.onError(cause);
+// 		}
+// 	};
 }
