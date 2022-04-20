@@ -15,6 +15,11 @@ public class ReplyStreamObserver implements StreamObserver<MatrixReply> {
     }
 
     @Override
+    public MatrixReply onNext(MatrixReply reply) {
+        return reply;
+    }
+
+    @Override
     public void onError(Throwable throwable) {}
 
     @Override
