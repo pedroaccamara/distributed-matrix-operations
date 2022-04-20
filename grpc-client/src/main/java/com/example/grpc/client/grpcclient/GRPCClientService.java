@@ -263,6 +263,35 @@ public class GRPCClientService {
 		.build());
 	}
 
+	// Overloading addBlocks and multblocks to support nonBlockingStubs as arguments as well
+	@Async
+	public MatrixReply addBlocks(MatrixServiceGrpc.MatrixServiceStub stub, int[][] matrix1, int[][] matrix2) throws InterruptedException {
+		return stub.addBlock(MatrixRequest.newBuilder()
+		.setA00(matrix1[0][0])
+		.setA01(matrix1[0][1])
+		.setA10(matrix1[1][0])
+		.setA11(matrix1[1][1])
+		.setB00(matrix2[0][0])
+		.setB01(matrix2[0][1])
+		.setB10(matrix2[1][0])
+		.setB11(matrix2[1][1])
+		.build());
+	}
+
+	@Async
+	public MatrixReply multBlocks(MatrixServiceGrpc.MatrixServiceStub stub, int[][] matrix1, int[][] matrix2) throws InterruptedException {
+		return stub.multiplyBlock(MatrixRequest.newBuilder()
+		.setA00(matrix1[0][0])
+		.setA01(matrix1[0][1])
+		.setA10(matrix1[1][0])
+		.setA11(matrix1[1][1])
+		.setB00(matrix2[0][0])
+		.setB01(matrix2[0][1])
+		.setB10(matrix2[1][0])
+		.setB11(matrix2[1][1])
+		.build());
+	}
+
 	// Getting an array of 2x2 blocks from any 2 dimensional matrix
 	public int[][][] getBlocks(int[][] matrix) {
 		int noBlocks = matrix.length*matrix.length / 4;
