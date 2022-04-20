@@ -278,8 +278,7 @@ public class GRPCClientService {
 		.setB01(matrix2[0][1])
 		.setB10(matrix2[1][0])
 		.setB11(matrix2[1][1])
-		.build(),
-		new ReplyStreamObserver());
+		.build());
 	}
 
 	@Async
