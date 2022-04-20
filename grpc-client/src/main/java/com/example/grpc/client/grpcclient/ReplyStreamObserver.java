@@ -5,6 +5,10 @@ import com.example.grpc.server.grpcserver.MatrixReply;
 
 public class ReplyStreamObserver implements StreamObserver<MatrixReply> {
 
+    public ReplyStreamObserver() {
+        return;
+    }
+
     @Override
     public void onNext(MatrixReply reply) {
         System.out.println("Received from server " + reply.getC00() + "\n" + reply.getC01() + "\n" + reply.getC10() + "\n" + reply.getC11() + "\n");
