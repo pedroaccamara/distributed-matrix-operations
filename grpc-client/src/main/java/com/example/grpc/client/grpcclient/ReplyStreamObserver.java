@@ -11,9 +11,9 @@ public class ReplyStreamObserver implements StreamObserver<MatrixReply> {
         System.out.println("Received from server " + reply.getC00() + "\n" + reply.getC01() + "\n" + reply.getC10() + "\n" + reply.getC11() + "\n");
     }
 
-    public MatrixReply onNext(MatrixReply reply) {
-        return reply;
-    }
+    // public MatrixReply onNext(MatrixReply reply) {
+    //     return reply;
+    // }
 
     @Override
     public void onError(Throwable throwable) {}
