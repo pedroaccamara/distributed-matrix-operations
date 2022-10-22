@@ -52,6 +52,7 @@ public class FileUploadController {
 				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
 	}
 
+	// Mapping responsible for clearing the storage of all files
 	@GetMapping("/delete")
 	public String deleteFile(Model model, RedirectAttributes redirectAttributes) {
 		storageService.deleteAll();
@@ -71,9 +72,9 @@ public class FileUploadController {
 
 		String process;
 		for (MultipartFile file : files) {
-			process = processMatrix(file, redirectAttributes);
-			if (process != "") return process;
-			storageService.store(file);
+			process = processMatrix(file, redirectAttributes); // Here a file is received and we check if it is valid
+			if (process != "") return process; // If there is a message directed to the user from this process we'll return it
+			storageService.store(file); // If there was no problem the file can be stored
 		}
 		if (files.length == 1) return message(redirectAttributes, "You successfully uploaded " + files[0].getOriginalFilename() + "!");
 		return message(redirectAttributes, "You successfully uploaded " + files[0].getOriginalFilename() + " and " + files[1].getOriginalFilename() + "!");
@@ -84,41 +85,57 @@ public class FileUploadController {
 		return ResponseEntity.notFound().build();
 	}
 
-	private String message(RedirectAttributes redirectAttributes, String message) {
-		return message(redirectAttributes, message, "redirect:/");
-	}
-
+	// Method with the commonly used construct of adding message to redirectAttributes, and having a direction to redirect to
 	private String message(RedirectAttributes redirectAttributes, String message, String redirect) {
 		redirectAttributes.addFlashAttribute("message", message);
 		return redirect;
 	}
 
+	// Method overloading taking advantage of previously defined method for common destination redirecting to "/"
+	private String message(RedirectAttributes redirectAttributes, String message) {
+		return message(redirectAttributes, message, "redirect:/");
+	}
+
+	
+	
+
+	// Main function processing the matrix received on file
 	private String processMatrix(MultipartFile file, RedirectAttributes redirectAttributes) {
 		try {
 			String stringed = new String(file.getBytes());
 			String[] matrix = stringed.trim().split("\n");
 			String[] cols = matrix[0].trim().split(" ");
 			int[][] m = new int[matrix.length][cols.length];
+
+			// First checks from the dimensions of the given matrix looking at the first row and col
 			if (!square(m)) return message(redirectAttributes, "Matrix is not squared");
 			if (!sidesSquared(m)) return message(redirectAttributes, "Matrix's sides aren't a perfect square");
-			String conversion = toInt(m, matrix);
+
+			// Conversion of the processed string array into a 2 dimensional integer matrix
+			String conversion = toInt(m, matrix); // In which further rows will also be checked for consistency with the first row
+
+			// If there is a message directed to the user from this conversion process we'll return it
 			if (!conversion.equals("")) return message(redirectAttributes, conversion);
-			if (TempStorage.getMatrix1() == null) {
+
+			// In this method we know there is storage space for at least one more matrix but we still need to check which storage space
+			if (TempStorage.getMatrix1() == null) { // And the matrix1 space will be prioritised
+				// If its a valid matrix and its the first one we're storing, there isn't anything else to check
 				TempStorage.setMatrix1(m);
-			} else {
+			} else { // If we're storing a second matrix, then we need to make sure it matches the dimensions of the first one
 				int size = TempStorage.getMatrix1().length;
 				if (m.length != size) return message(redirectAttributes, "Make sure you upload matrices of the same size!\nThe first matrix was " + size + "x" + size);
 				TempStorage.setMatrix2(m);
-				TempStorage.setInitialised(true);
+				TempStorage.setInitialised(true); // Helpful variable to control whether the storage is filled or not
 			}
-			return "";
+			return ""; // No important messages to return if everything went accordingly
 		}
 		catch (Exception e) {
-			System.out.println("FileUploadController@122\n" + e.toString());
+			System.out.println("FileUploadController@127\n" + e.toString());
 			return message(redirectAttributes, "Check error");
 		}
 	}
 
+	// In initial processing, convert string array inputed to integer matrix
 	private String toInt(int[][] m, String[] matrix) {
 		int noCols = matrix[0].trim().split(" ").length;
 		int r = 0;
