@@ -1,4 +1,4 @@
-# ECS656U-765PLab2StartingPoint
+# Distributed Environment Setup
 Based upon https://github.com/sajeerzeji/SpringBoot-GRPC
 Commands for preparing the enviornment (Assuming you are in the main folder e.g. the one with the pom.xml file in it)
 1. sudo apt update
@@ -9,4 +9,3 @@ Commands for preparing the enviornment (Assuming you are in the main folder e.g.
 6. (From grpc-client folder e.g. seperate ssh connection) mvn package -Dmaven.test.skip=true
 7. (From grpc-client folder e.g. seperate ssh connection) chmod 777 mvnw
 8. (From grpc-client folder e.g. seperate ssh connection) ./mvnw spring-boot:run -Dmaven.test.skip=true
-
